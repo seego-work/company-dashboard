@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Dashboard - Bit Binary Technologies</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Wallpaper */
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: 
+                url('file:///C:/Users/work/Pictures/Operations environment wallpaper2.jpg')
+                no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 0;
+        }
+        
+        /* Main Container */
+        .main-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+        
+        /* Setup Box */
+        .setup-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        
+        /* Header */
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 50px;
+            color: #1a2980;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            color: #1a2980;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        /* Email Display */
+        .email-display {
+            background: #e8f4fd;
+            padding: 12px 20px;
+            border-radius: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            font-weight: 500;
+            color: #1a2980;
+        }
+        
+        /* Form Steps */
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Input Groups */
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 18px;
+            text-align: center;
+            letter-spacing: 3px;
+            box-sizing: border-box;
+        }
+        
+        .username-field {
+            letter-spacing: normal;
+            text-align: left;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #1a2980;
+            box-shadow: 0 0 0 3px rgba(26, 41, 128, 0.1);
+        }
+        
+        .input-hint {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Password Match Indicator */
+        .match-indicator {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .match-good {
+            background: rgba(76, 175, 80, 0.1);
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+        }
+        
+        .match-bad {
+            background: rgba(244, 67, 54, 0.1);
+            color: #c62828;
+            border: 1px solid #f44336;
+        }
+        
+        /* Username Preview */
+        .username-preview {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        
+        .preview-header {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .preview-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .preview-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .preview-text {
+            flex: 1;
+        }
+        
+        .preview-username {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1a2980;
+            margin-bottom: 5px;
+        }
+        
+        .preview-email {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(26, 41, 128, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+        
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .button-group .btn {
+            flex: 1;
+        }
+        
+        /* Benefits */
+        .benefits {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .benefits h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #1a2980;
+            margin-top: 0;
+        }
+        
+        .benefits ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .benefits li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        /* Dashboard */
+        .dashboard-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.5s;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .user-welcome {
+            text-align: right;
+        }
+        
+        .welcome-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a2980;
+            margin-bottom: 5px;
+        }
+        
+        .welcome-email {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dashboard-card h3 {
+            color: #1a2980;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-content {
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        /* Success Popup */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+        
+        .popup-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.5s;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .popup-icon {
+            font-size: 70px;
+            color: #4caf50;
+            margin-bottom: 20px;
+        }
+        
+        .popup-content h2 {
+            color: #1a2980;
+            margin-bottom: 15px;
+        }
+        
+        .popup-message {
+            margin: 20px 0;
+            line-height: 1.6;
+            color: #666;
+        }
+        
+        .credentials-summary {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .credential-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .credential-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .email-notice {
+            background: #e8f4fd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #1a2980;
+        }
+    </style>
+</head>
+<body>
+    <!-- STEP 1: PASSWORD & USERNAME SETUP -->
+    <div class="main-container" id="setup-container">
+        <div class="setup-box">
+            <!-- Header -->
+            <div class="header">
+                <div class="logo">
+                    <i class="fas fa-chart-network"></i>
+                </div>
+                <h1>Bit Binary Technologies</h1>
+                <p class="subtitle">Team Status Dashboard - Quick Access Setup</p>
+                
+                <div class="email-display">
+                    <i class="fas fa-envelope"></i>
+                    <span id="current-email">kgololoseego@itkaofela.co.za</span>
+                </div>
+            </div>
+            
+            <!-- Step 1: Create Password -->
+            <div class="form-step active" id="step-password">
+                <h2><i class="fas fa-lock"></i> Create Your Password</h2>
+                <p class="subtitle">Enter 6 digits you'll remember for instant access</p>
+                
+                <div class="input-group">
+                    <label class="input-label">6-Digit Password</label>
+                    <input type="password" class="input-field" id="password" 
+                           placeholder="Enter 6 digits" maxlength="6" pattern="\d{6}">
+                    <div class="input-hint">
+                        <i class="fas fa-info-circle"></i> Numbers only (0-9)
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Confirm Password</label>
+                    <input type="password" class="input-field" id="confirm-password" 
+                           placeholder="Re-enter 6 digits" maxlength="6" pattern="\d{6}">
+                    <div class="input-hint">
+                        <i class="fas fa-check-circle"></i> Must match exactly
+                    </div>
+                </div>
+                
+                <div class="match-indicator" id="password-match">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Enter your 6-digit password</span>
+                </div>
+                
+                <button class="btn btn-primary" onclick="goToUsername()">
+                    Continue to Username <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            
+            <!-- Step 2: Create Username -->
+            <div class="form-step" id="step-username">
+                <h2><i class="fas fa-user"></i> Choose Your Username</h2>
+                <p class="subtitle">This will display on your dashboard</p>
+                
+                <div class="input-group">
+                    <label class="input-label">Username</label>
+                    <input type="text" class="input-field username-field" id="username" 
+                           placeholder="Enter letters only (e.g., John)" 
+                           pattern="[A-Za-z]+" minlength="3" maxlength="20">
+                    <div class="input-hint">
+                        <i class="fas fa-keyboard"></i> 3-20 letters only, no numbers or spaces
+                    </div>
+                </div>
+                
+                <!-- Username Preview -->
+                <div class="username-preview">
+                    <div class="preview-header">
+                        <i class="fas fa-eye"></i> This will display on your dashboard:
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-avatar" id="preview-avatar">U</div>
+                        <div class="preview-text">
+                            <div class="preview-username" id="preview-username">Username</div>
+                            <div class="preview-email" id="preview-email">kgololoseego@itkaofela.co.za</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="goToPassword()">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn btn-primary" onclick="completeSetup()">
+                        <i class="fas fa-rocket"></i> Complete Setup & Access Dashboard
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Benefits -->
+            <div class="benefits">
+                <h4><i class="fas fa-bolt"></i> Instant Access Benefits:</h4>
+                <ul>
+                    <li><i class="fas fa-check" style="color:#4caf50"></i> <strong>No waiting</strong> for email codes</li>
+                    <li><i class="fas fa-check" style="color:#4caf50"></i> <strong>Personalized</strong> dashboard with your username</li>
+                    <li><i class="fas fa-check" style="color:#4caf50"></i> <strong>Microsoft confirmation</strong> sent automatically</li>
+                    <li><i class="fas fa-check" style="color:#4caf50"></i> <strong>Future logins:</strong> Just enter your 6-digit password</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- STEP 2: DASHBOARD -->
+    <div class="main-container" id="dashboard-container">
+        <div class="setup-box">
+            <div class="dashboard-header">
+                <div>
+                    <h1><i class="fas fa-tachometer-alt"></i> Team Dashboard</h1>
+                    <p class="subtitle">Welcome to your workspace</p>
+                </div>
+                <div class="user-welcome">
+                    <div class="welcome-name" id="dashboard-username">Username</div>
+                    <div class="welcome-email" id="dashboard-email">user@company.com</div>
+                </div>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-bullhorn"></i> Announcements</h3>
+                    <div class="card-content">
+                        • Team meeting: Friday 10 AM<br>
+                        • Server maintenance: Sunday 2-4 AM<br>
+                        • New API documentation available
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-tasks"></i> Your Tasks</h3>
+                    <div class="card-content">
+                        • Fix login page bug<br>
+                        • Update API documentation<br>
+                        • Review PR #45
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-code-branch"></i> Pull Requests</h3>
+                    <div class="card-content">
+                        • PR #45: Login feature (3 days)<br>
+                        • PR #52: Dashboard UI (1 day)<br>
+                        • PR #58: Bug fixes
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-server"></i> System Status</h3>
+                    <div class="card-content">
+                        • Main API: <span style="color:green">✅ Operational</span><br>
+                        • Database: <span style="color:green">✅ Stable</span><br>
+                        • File Server: <span style="color:orange">⚠️ Maintenance</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+                <button class="btn btn-secondary" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SUCCESS POPUP -->
+    <div class="popup-overlay" id="success-popup">
+        <div class="popup-content">
+            <div class="popup-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Setup Complete! 🎉</h2>
+            
+            <div class="popup-message">
+                <p>Welcome, <strong id="popup-username">Username</strong>!</p>
+                <p>Your quick access has been successfully configured.</p>
+                
+                <div class="credentials-summary">
+                    <div class="credential-item">
+                        <i class="fas fa-user" style="color:#1a2980"></i>
+                        <div>
+                            <div style="font-size:12px;color:#666">Username</div>
+                            <div style="font-weight:bold" id="summary-username">username</div>
+                        </div>
+                    </div>
+                    <div class="credential-item">
+                        <i class="fas fa-key" style="color:#1a2980"></i>
+                        <div>
+                            <div style="font-size:12px;color:#666">Password</div>
+                            <div style="font-weight:bold">6-digit password saved</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="email-notice">
+                    <i class="fas fa-paper-plane"></i>
+                    <div>
+                        <strong>Confirmation email sent!</strong><br>
+                        <small>Microsoft verification sent to your work email</small>
+                    </div>
+                </div>
+                
+                <p><small>Future logins: Just enter your 6-digit password</small></p>
+            </div>
+            
+            <button class="btn btn-primary" onclick="enterDashboard()" style="margin-top: 20px;">
+                <i class="fas fa-tachometer-alt"></i> Enter Dashboard Now
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const setupContainer = document.getElementById('setup-container');
+        const dashboardContainer = document.getElementById('dashboard-container');
+        const successPopup = document.getElementById('success-popup');
+        
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const usernameInput = document.getElementById('username');
+        const passwordMatch = document.getElementById('password-match');
+        
+        const previewUsername = document.getElementById('preview-username');
+        const previewAvatar = document.getElementById('preview-avatar');
+        const previewEmail = document.getElementById('preview-email');
+        
+        const popupUsername = document.getElementById('popup-username');
+        const summaryUsername = document.getElementById('summary-username');
+        const dashboardUsername = document.getElementById('dashboard-username');
+        const dashboardEmail = document.getElementById('dashboard-email');
+        
+        const currentEmail = 'kgololoseego@itkaofela.co.za';
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            previewEmail.textContent = currentEmail;
+            
+            // Password validation
+            passwordInput.addEventListener('input', checkPasswords);
+            confirmPasswordInput.addEventListener('input', checkPasswords);
+            
+            // Username preview
+            usernameInput.addEventListener('input', function() {
+                const username = this.value.trim();
+                previewUsername.textContent = username || 'Username';
+                
+                if (username.length > 0) {
+                    previewAvatar.textContent = username.charAt(0).toUpperCase();
+                } else {
+                    previewAvatar.textContent = 'U';
+                }
+            });
+            
+            // Check for existing user
+            checkExistingUser();
+        });
+        
+        // Check passwords match
+        function checkPasswords() {
+            const password = passwordInput.value;
+            const confirm = confirmPasswordInput.value;
+            
+            if (password.length === 0 && confirm.length === 0) {
+                passwordMatch.innerHTML = '<i class="fas fa-info-circle"></i> Enter your 6-digit password';
+                passwordMatch.className = 'match-indicator';
+            } else if (password.length < 6 || confirm.length < 6) {
+                passwordMatch.innerHTML = '<i class="fas fa-clock"></i> Enter 6 digits in both fields';
+                passwordMatch.className = 'match-indicator';
+            } else if (password === confirm) {
+                passwordMatch.innerHTML = '<i class="fas fa-check-circle"></i> Passwords match!';
+                passwordMatch.className = 'match-indicator match-good';
+            } else {
+                passwordMatch.innerHTML = '<i class="fas fa-exclamation-circle"></i> Passwords do not match';
+                passwordMatch.className = 'match-indicator match-bad';
+            }
+        }
+        
+        // Navigation
+        function goToUsername() {
+            const password = passwordInput.value;
+            const confirm = confirmPasswordInput.value;
+            
+            // Validate password
+            if (password.length !== 6 || !/^\d+$/.test(password)) {
+                alert('❌ Password must be exactly 6 digits!');
+                return;
+            }
+            
+            if (password !== confirm) {
+                alert('❌ Passwords do not match!');
+                return;
+            }
+            
+            // Move to username step
+            document.getElementById('step-password').classList.remove('active');
+            document.getElementById('step-username').classList.add('active');
+        }
+        
+        function goToPassword() {
+            document.getElementById('step-username').classList.remove('active');
+            document.getElementById('step-password').classList.add('active');
+        }
+        
+        // Complete setup
+        function completeSetup() {
+            const password = passwordInput.value;
+            const confirm = confirmPasswordInput.value;
+            const username = usernameInput.value;
+            
+            // Validate everything
+            if (password.length !== 6 || !/^\d+$/.test(password)) {
+                alert('❌ Password must be exactly 6 digits!');
+                return;
+            }
+            
+            if (password !== confirm) {
+                alert('❌ Passwords do not match!');
+                return;
+            }
+            
+            if (!/^[A-Za-z]{3,20}$/.test(username)) {
+                alert('❌ Username must be 3-20 letters only (no numbers or spaces)!');
+                return;
+            }
+            
+            // Save user data
+            const userData = {
+                email: currentEmail,
+                username: username,
+                password: password,
+                setupDate: new Date().toISOString(),
+                lastLogin: new Date().toISOString()
+            };
+            
+            // Save to localStorage
+            localStorage.setItem(`dashboard_user_${currentEmail}`, JSON.stringify(userData));
+            localStorage.setItem('last_user', JSON.stringify({email: currentEmail, username: username}));
+            
+            // Set popup details
+            popupUsername.textContent = username;
+            summaryUsername.textContent = username;
+            
+            // Show success popup
+            successPopup.style.display = 'flex';
+            
+            // Send Microsoft email in background
+            sendMicrosoftEmail(currentEmail, username);
+        }
+        
+        // Enter dashboard
+        function enterDashboard() {
+            const username = usernameInput.value;
+            
+            // Close popup
+            successPopup.style.display = 'none';
+            
+            // Hide setup, show dashboard
+            setupContainer.style.display = 'none';
+            dashboardContainer.style.display = 'block';
+            
+            // Set dashboard welcome
+            dashboardUsername.textContent = username;
+            dashboardEmail.textContent = currentEmail;
+        }
+        
+        // Send Microsoft email (simulated)
+        function sendMicrosoftEmail(email, username) {
+            console.log(`📧 Microsoft confirmation email sent to: ${email}`);
+            console.log(`👤 Username: ${username}`);
+            console.log(`⏰ Sent at: ${new Date().toLocaleTimeString()}`);
+            
+            // In real app, this would be an API call
+            // fetch('/api/send-microsoft-email', { ... })
+            
+            // Simulate delay
+            setTimeout(() => {
+                console.log('✅ Microsoft email delivery confirmed');
+            }, 3000);
+        }
+        
+        // Check for existing user
+        function checkExistingUser() {
+            const savedUser = localStorage.getItem(`dashboard_user_${currentEmail}`);
+            
+            if (savedUser) {
+                const userData = JSON.parse(savedUser);
+                const useQuickLogin = confirm(`Welcome back ${userData.username}!\n\nUse saved password for instant access?`);
+                
+                if (useQuickLogin) {
+                    const enteredPassword = prompt(`Enter your 6-digit password for ${userData.username}:`);
+                    
+                    if (enteredPassword === userData.password) {
+                        // Direct to dashboard
+                        setupContainer.style.display = 'none';
+                        dashboardContainer.style.display = 'block';
+                        dashboardUsername.textContent = userData.username;
+                        dashboardEmail.textContent = userData.email;
+                        return;
+                    } else {
+                        alert('Incorrect password. Please set up again.');
+                    }
+                }
+            }
+        }
+        
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                dashboardContainer.style.display = 'none';
+                setupContainer.style.display = 'block';
+                
+                // Reset form
+                passwordInput.value = '';
+                confirmPasswordInput.value = '';
+                usernameInput.value = '';
+                checkPasswords();
+                goToPassword();
+            }
+        }
+        
+        // Quick test data (for development)
+        if (window.location.href.includes('localhost') || window.location.href.includes('127.0.0.1')) {
+            window.addEventListener('load', function() {
+                if (!localStorage.getItem('test_data_added')) {
+                    // Auto-fill for testing
+                    setTimeout(() => {
+                        passwordInput.value = '123456';
+                        confirmPasswordInput.value = '123456';
+                        usernameInput.value = 'Kgolo';
+                        checkPasswords();
+                        usernameInput.dispatchEvent(new Event('input'));
+                        localStorage.setItem('test_data_added', 'true');
+                    }, 1000);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

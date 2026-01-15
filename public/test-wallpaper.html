@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wallpaper Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 50px;
+            font-family: Arial;
+            background: 
+                url('file:///C:/Users/work/Pictures/Operations environment wallpaper2.jpg')
+                no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            min-height: 100vh;
+        }
+        
+        .test-box {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        
+        h1 {
+            color: white;
+            text-shadow: 2px 2px 4px black;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-box">
+        <h1>🎨 Wallpaper Test</h1>
+        <p>Testing: C:\Users\work\Pictures\Operations environment wallpaper2.jpg</p>
+        <p>If you see ANY image behind this text, the wallpaper is loading.</p>
+        <p>If you see plain color, the wallpaper is NOT loading.</p>
+        <button onclick="checkImage()" style="padding: 10px 20px; margin: 10px;">
+            Check Image Status
+        </button>
+        <div id="result" style="margin-top: 20px;"></div>
+    </div>
+    
+    <script>
+        function checkImage() {
+            const img = new Image();
+            img.onload = function() {
+                document.getElementById('result').innerHTML = 
+                    '<div style="background:green;padding:10px;border-radius:5px;">' +
+                    '✅ SUCCESS: Wallpaper loaded!<br>' +
+                    'Size: ' + this.width + 'x' + this.height + 'px' +
+                    '</div>';
+            };
+            img.onerror = function() {
+                document.getElementById('result').innerHTML = 
+                    '<div style="background:red;padding:10px;border-radius:5px;">' +
+                    '❌ FAILED: Wallpaper NOT found<br>' +
+                    'Try copying image to project folder' +
+                    '</div>';
+            };
+            img.src = 'file:///C:/Users/work/Pictures/Operations environment wallpaper2.jpg';
+        }
+        
+        // Auto-check
+        window.onload = function() {
+            setTimeout(checkImage, 1000);
+        };
+    </script>
+</body>
+</html>
