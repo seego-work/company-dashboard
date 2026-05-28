@@ -5,16 +5,18 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve static files from public folder
 app.use(express.static('public'));
 
-// Basic route - serve the dashboard
+// Default route goes to login page
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-// Start server
+// Dashboard route
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
+
 app.listen(PORT, () => {
     console.log(`🚀 Dashboard server running on http://localhost:${PORT}`);
-    console.log(`📁 Serving files from: ${__dirname}/public`);
 });
